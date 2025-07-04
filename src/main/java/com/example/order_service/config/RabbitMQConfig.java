@@ -1,4 +1,4 @@
-package com.example.order_service;
+package com.example.order_service.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
