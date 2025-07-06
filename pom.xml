@@ -67,6 +67,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		<!--saga events-->
+		<dependency>
+			<groupId>org.example</groupId>
+			<artifactId>saga-events</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

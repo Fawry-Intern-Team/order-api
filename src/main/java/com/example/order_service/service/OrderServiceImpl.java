@@ -31,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private final OrderSagaStarter orderSagaStarter;
 
     @Override
     public OrderResponseDTO createOrder(OrderRequestDTO request) {
@@ -49,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderProducts(productEntities);
 
         Order saved = orderRepository.save(order);
-
+        orderSagaStarter.startOrderSaga(saved);
         return orderMapper.toDto(saved);
     }
 
