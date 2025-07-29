@@ -3,14 +3,19 @@ package com.example.order_service.controller;
 import com.example.order_service.dto.OrderRequestDTO;
 import com.example.order_service.dto.OrderResponseDTO;
 import com.example.order_service.dto.UpdateOrderStatusDTO;
+import com.example.order_service.enums.OrderStatus;
 import com.example.order_service.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -24,12 +29,12 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable UUID id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
@@ -38,15 +43,15 @@ public class OrderController {
     public ResponseEntity<Page<OrderResponseDTO>> getOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) Long customerId,
+            @RequestParam(required = false) OrderStatus status,
+            @RequestParam(required = false) UUID customerId,
             @RequestParam(defaultValue = "createdAt") String sortBy
     ) {
         return ResponseEntity.ok(orderService.getAllOrders(page, size, status, customerId, sortBy));
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderStatusDTO dto) {
+    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderStatusDTO dto) {
         return ResponseEntity.ok(orderService.updateOrder(id, dto));
     }
 }

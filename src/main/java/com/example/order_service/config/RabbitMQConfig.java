@@ -15,6 +15,11 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     public static final String ORDER_CREATED_QUEUE = "order.created.queue";
     public static final String ORDER_FAILED_QUEUE = "origin.order.failed";
+    public static final String NOTIFICATION_QUEUE = "notification-queue";
+    @Bean
+    public Queue notificationQueue() {
+        return new Queue(NOTIFICATION_QUEUE);
+    }
     @Bean
     public FanoutExchange orderFailedExchange() {
         return new FanoutExchange("order.failed");

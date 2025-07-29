@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -19,10 +20,12 @@ import java.util.List;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
+    @Column(unique = true, updatable = false)
+    private String idempotencyKey;
 
-    private Long customerId;
+    private UUID customerId;
 
     @Column(nullable = false)
     private BigDecimal totalAmount;
@@ -31,7 +34,7 @@ public class Order {
     private OrderStatus status;
     private String couponCode;
 
-    private String transactionId;
+    private UUID transactionId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

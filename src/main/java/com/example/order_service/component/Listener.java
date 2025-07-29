@@ -27,10 +27,10 @@ public class Listener {
 
     }
 
-    @RabbitListener(queues = "payment.completed.queue")
+    @RabbitListener(queues = "coupon.applied.queue")
     public void onPaymentCompleted(PaymentCompletedEvent event) {
         orderRepository.findById(event.getOrderId()).ifPresent(order -> {
-            order.setStatus(OrderStatus.COMPLETED);
+            order.setStatus(OrderStatus.PROCESSING);
             order.setTransactionId(event.getTransactionId());
             orderRepository.save(order);
             log.info("✅ Order " + event.getOrderId() + " marked as COMPLETED.");

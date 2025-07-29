@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "order_product")
 @Data
@@ -15,15 +17,17 @@ import lombok.ToString;
 @AllArgsConstructor
 public class OrderProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
     private Order order;
     @Column(nullable = false)
-    private Long productId;
+    private UUID productId;
+    @Column(nullable = false)
+    private UUID storeId;
     @Min(1)
     private Integer quantity;
 }
