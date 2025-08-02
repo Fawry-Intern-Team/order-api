@@ -4,6 +4,7 @@ import com.example.order_service.enums.OrderStatus;
 import com.example.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.events.OrderCreatedEvent;
 import org.example.events.OrderFailedEvent;
 import org.example.events.PaymentCompletedEvent;
 import org.example.events.StockReservedEvent;
@@ -28,10 +29,11 @@ public class Listener {
     }
 
     @RabbitListener(queues = "coupon.applied.queue")
-    public void onPaymentCompleted(PaymentCompletedEvent event) {
+    public void onPaymentCompleted(OrderCreatedEvent event) {
         orderRepository.findById(event.getOrderId()).ifPresent(order -> {
             order.setStatus(OrderStatus.PROCESSING);
             order.setTransactionId(event.getTransactionId());
+            order.setTotalAmount(event.getTotalAmount());
             orderRepository.save(order);
             log.info("✅ Order " + event.getOrderId() + " marked as COMPLETED.");
         });
